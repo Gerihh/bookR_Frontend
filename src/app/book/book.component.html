@@ -1,0 +1,24 @@
+      <div class="card-container" (mousedown)="startDrag($event)" (mousemove)="drag($event)" (mouseup)="endDrag()">
+        <div class="scroll-box">
+          @for (item of books; track $index) {
+            <p-card [header]="item.title" [style]="{ width: '340px' }" class="card">
+              <ng-template pTemplate="header">
+                <div class="header-content">
+                  <img alt="Card" src="assets/book.png"/>
+                </div>
+              </ng-template>
+            </p-card>
+            }
+        </div>
+      </div>
+
+
+
+      <div class="plus-button">
+        <button class="rounded-button">
+          <i class="pi pi-plus"></i>
+        </button>
+      </div>
+
+
+

@@ -1,0 +1,47 @@
+.card-container {
+  display: flex;
+  justify-content: space-between;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  user-select: none;
+  position: relative;
+  height: 100vh; /* Make the container full height of the viewport */
+}
+
+.card-container::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  margin: 20px;
+  justify-content: center;
+  text-align: center;
+  color: blue;
+}
+
+.scroll-box {
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+}
+
+.plus-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.rounded-button {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  border: none;
+  background-color: #007bff;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+
+
