@@ -21,7 +21,7 @@
                 <p-button label="Submit" (click)="submitNewBook()"></p-button>  
               </div>
               <div class="close-div">
-                <button class="close-button" (click)="closeForm()">
+                <button class="close-button" (click)="switchState()">
                   <i class="pi pi-times"></i>
                 </button>
               </div>
@@ -31,7 +31,7 @@
       
 
       <div class="plus-button">
-        <button class="rounded-button" (click)="openForm()">
+        <button class="rounded-button" (click)="switchState()">
           <i class="pi pi-plus"></i>
         </button>
       </div>

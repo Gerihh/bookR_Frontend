@@ -62,11 +62,7 @@ export class BookComponent implements OnInit {
     }
   }
 
-  openForm() {
-    this.showForm = true;
-  }
-
-  closeForm() {
-    this.showForm = false;
+  switchState() {
+    this.showForm = !this.showForm;
   }
 }
