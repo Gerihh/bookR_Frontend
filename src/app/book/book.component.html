@@ -4,7 +4,7 @@
             <p-card [header]="item.title" [style]="{ width: '340px' }" class="card">
               <ng-template pTemplate="header">
                 <div class="header-content">
-                  <img alt="Card" src="assets/book.png"/>
+                  <img alt="Card" src="assets/book.png" (click)="clickedBook(item.title)"/>
                 </div>
               </ng-template>
             </p-card>
@@ -18,7 +18,7 @@
               <p>title</p>
               <input type="text" [(ngModel)]="model.title"/>
               <div class="submit-button">
-                <p-button label="Submit" (click)="submitNewBook()"></p-button>  
+                <p-button label="Submit" (click)="submitNewBook()"></p-button>
               </div>
               <div class="close-div">
                 <button class="close-button" (click)="switchState()">
@@ -28,7 +28,7 @@
             </p-card>
         </div>
       }
-      
+
 
       <div class="plus-button">
         <button class="rounded-button" (click)="switchState()">

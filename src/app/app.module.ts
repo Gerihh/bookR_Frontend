@@ -10,11 +10,13 @@ import { BookComponent } from './book/book.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { ElementComponent } from './element/element.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BookComponent
+    BookComponent,
+    ElementComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,39 @@
+<div class="card-container" (mousedown)="startDrag($event)" (mousemove)="drag($event)" (mouseup)="endDrag()">
+  <div class="scroll-box">
+    @for (item of elements; track $index) {
+      <p-card [header]="item.name" [style]="{ width: '340px' }" class="card">
+        <ng-template pTemplate="header">
+          <div class="header-content">
+            <img alt="Card" src="assets/book.png"/>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <p style="text-align: end; font-weight: bold;">{{item.nodeCount}}</p>
+      </ng-template>
+      </p-card>
+      }
+  </div>
+</div>
+
+@if (showForm) {
+  <div class="input">
+    <p-card header="Input">
+        <p>name</p>
+        <input type="text" [(ngModel)]="model.name"/>
+        <div class="submit-button">
+          <p-button label="Submit" (click)="submitNewElement()"></p-button>
+        </div>
+        <div class="close-div">
+          <button class="close-button" (click)="switchState()">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
+      </p-card>
+  </div>
+}
+
+<div class="plus-button">
+  <button class="rounded-button" (click)="switchState()">
+    <i class="pi pi-plus"></i>
+  </button>
+</div>

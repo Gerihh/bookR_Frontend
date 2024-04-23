@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { BookModel } from '../book-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-book',
@@ -17,7 +18,7 @@ export class BookComponent implements OnInit {
   };
   showForm: boolean = false;
 
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService, private router: Router) {}
 
   ngOnInit(): void {
     this.httpService.getBooks().subscribe({
@@ -64,5 +65,9 @@ export class BookComponent implements OnInit {
 
   switchState() {
     this.showForm = !this.showForm;
+  }
+
+  clickedBook(title: string) {
+    this.router.navigate(['/elements', title]);
   }
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BookModel } from './book-model';
+import { ElementModel } from './element-model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,17 @@ export class HttpService {
 
   createNewBook(model: BookModel): Observable<any> {
     return this.http.post<any>(`${this.APIURL}/api/books`, model);
-  } 
+  }
+
+  getBookElements(title: string): Observable<any> {
+    return this.http.get<any>(`${this.APIURL}/api/elements/book/name/${title}`);
+  }
+
+  createNewElement(model: ElementModel): Observable<any> {
+    return this.http.post(`${this.APIURL}/api/elements`, model);
+  }
+
+  getBookIdByTitle(title: string): Observable<any> {
+    return this.http.get<any>(`${this.APIURL}/api/book/name/${title}`);
+  }
 }
