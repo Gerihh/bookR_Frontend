@@ -43,5 +43,32 @@
   cursor: pointer;
 }
 
+.input {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
 
+.submit-button {
+  margin: 10px;
+  cursor: pointer;
+}
 
+.close-div {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  z-index: 9999;
+}
+
+.close-button {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: red;
+  color: #ffffff;
+  cursor: pointer;
+}

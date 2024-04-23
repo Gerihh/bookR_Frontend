@@ -12,10 +12,26 @@
         </div>
       </div>
 
-
+      @if (showForm) {
+        <div class="input">
+          <p-card header="Input">
+              <p>title</p>
+              <input type="text" [(ngModel)]="model.title"/>
+              <div class="submit-button">
+                <p-button label="Submit" (click)="submitNewBook()"></p-button>  
+              </div>
+              <div class="close-div">
+                <button class="close-button" (click)="closeForm()">
+                  <i class="pi pi-times"></i>
+                </button>
+              </div>
+            </p-card>
+        </div>
+      }
+      
 
       <div class="plus-button">
-        <button class="rounded-button">
+        <button class="rounded-button" (click)="openForm()">
           <i class="pi pi-plus"></i>
         </button>
       </div>
