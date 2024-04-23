@@ -4,11 +4,11 @@
       <p-card [header]="item.name" [style]="{ width: '340px' }" class="card">
         <ng-template pTemplate="header">
           <div class="header-content">
-            <img alt="Card" src="assets/book.png"/>
+            <img alt="Card" src="assets/note.png"/>
           </div>
         </ng-template>
         <ng-template pTemplate="footer">
-          <p style="text-align: end; font-weight: bold;">{{item.nodeCount}}</p>
+          <p style="text-align: end; font-weight: bold;">{{item.nodeCount}} gondolat</p>
       </ng-template>
       </p-card>
       }
@@ -17,11 +17,11 @@
 
 @if (showForm) {
   <div class="input">
-    <p-card header="Input">
-        <p>name</p>
+    <p-card header="Új kategória felvétele">
+        <p>Kategória neve</p>
         <input type="text" [(ngModel)]="model.name"/>
         <div class="submit-button">
-          <p-button label="Submit" (click)="submitNewElement()"></p-button>
+          <p-button label="Felvétel" (click)="submitNewElement()"></p-button>
         </div>
         <div class="close-div">
           <button class="close-button" (click)="switchState()">

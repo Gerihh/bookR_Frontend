@@ -6,7 +6,7 @@
   scrollbar-width: none;
   user-select: none;
   position: relative;
-  height: 100vh; /* Make the container full height of the viewport */
+  height: 100vh;
 }
 
 .card-container::-webkit-scrollbar {
@@ -49,6 +49,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  width: 350px;
 }
 
 .submit-button {

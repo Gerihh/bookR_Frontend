@@ -7,6 +7,9 @@
                   <img alt="Card" src="assets/book.png" (click)="clickedBook(item.title)"/>
                 </div>
               </ng-template>
+              <ng-template pTemplate="footer">
+                <p style="text-align: end; font-weight: bold;">{{item.elementCount}} kategória</p>
+            </ng-template>
             </p-card>
             }
         </div>
@@ -14,11 +17,11 @@
 
       @if (showForm) {
         <div class="input">
-          <p-card header="Input">
-              <p>title</p>
+          <p-card header="Új könyv felvétele">
+              <p>Cím</p>
               <input type="text" [(ngModel)]="model.title"/>
               <div class="submit-button">
-                <p-button label="Submit" (click)="submitNewBook()"></p-button>
+                <p-button label="Felvétel" (click)="submitNewBook()"></p-button>
               </div>
               <div class="close-div">
                 <button class="close-button" (click)="switchState()">
