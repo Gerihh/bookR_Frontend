@@ -1,0 +1,23 @@
+<!-- node.component.html -->
+<ng-container *ngIf="nodes && nodes.length > 0"> <!-- Ensure nodes exist and are not empty -->
+  <ul>
+    <li *ngFor="let node of nodes">
+      {{ node.name }}
+      <!-- Recursively render child nodes -->
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node.children }"></ng-container>
+    </li>
+  </ul>
+</ng-container>
+
+<ng-template #nodeTemplate let-nodes>
+  <!-- Check if there are any child nodes to render -->
+  <ng-container *ngIf="nodes && nodes.length > 0">
+    <ul>
+      <li *ngFor="let childNode of nodes">
+        {{ childNode.name }}
+        <!-- Recursively render grandchildren -->
+        <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: childNode.children }"></ng-container>
+      </li>
+    </ul>
+  </ng-container>
+</ng-template>

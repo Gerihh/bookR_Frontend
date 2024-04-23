@@ -11,12 +11,13 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ElementComponent } from './element/element.component';
-
+import { NodeComponent } from './node/node.component';
 @NgModule({
   declarations: [
     AppComponent,
     BookComponent,
-    ElementComponent
+    ElementComponent,
+    NodeComponent
   ],
   imports: [
     BrowserModule,
@@ -31,3 +32,4 @@ import { ElementComponent } from './element/element.component';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

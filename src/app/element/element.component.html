@@ -4,7 +4,7 @@
       <p-card [header]="item.name" [style]="{ width: '340px' }" class="card">
         <ng-template pTemplate="header">
           <div class="header-content">
-            <img alt="Card" src="assets/note.png"/>
+            <img alt="Card" src="assets/note.png" (click)="clickedElement(item.name)"/>
           </div>
         </ng-template>
         <ng-template pTemplate="footer">

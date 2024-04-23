@@ -68,6 +68,6 @@ export class BookComponent implements OnInit {
   }
 
   clickedBook(title: string) {
-    this.router.navigate(['/elements', title]);
+    this.router.navigate(['/', title, 'elements']);;
   }
 }

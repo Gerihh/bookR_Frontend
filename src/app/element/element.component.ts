@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ElementModel } from '../element-model';
 
 @Component({
@@ -9,6 +9,7 @@ import { ElementModel } from '../element-model';
   styleUrl: './element.component.css',
 })
 export class ElementComponent implements OnInit {
+
   elements: any[] = [];
   title: string = '';
   isDragging: boolean = false;
@@ -24,7 +25,8 @@ export class ElementComponent implements OnInit {
 
   constructor(
     private httpService: HttpService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -83,5 +85,9 @@ export class ElementComponent implements OnInit {
       },
       error: (err: any) => console.log(err),
     });
+  }
+
+  clickedElement(name: string) {
+    this.router.navigate(['/', this.title, name, 'nodes']);
   }
 }

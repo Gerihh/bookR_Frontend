@@ -32,4 +32,8 @@ export class HttpService {
   getBookIdByTitle(title: string): Observable<any> {
     return this.http.get<any>(`${this.APIURL}/api/book/name/${title}`);
   }
+
+  getElementNodes(name: string): Observable<any> {
+    return this.http.get<any>(`${this.APIURL}/api/nodes/element/name/${name}`);
+  }
 }
