@@ -5,4 +5,6 @@ export interface NodeModel {
   elementId: number;
   parentNodeId: number | null;
   children?: NodeModel[];
+  positionX?: number;
+  positionY?: number;
 }

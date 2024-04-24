@@ -1,0 +1,60 @@
+.node-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    cursor: move;
+  }
+  
+  .node {
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: move;
+  }
+  
+  .content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .button {
+    border: none;
+    background-color: black; /* Fill color */
+    color: transparent; /* Text color */
+    width: 15px; /* Adjust button width */
+    height: 15px; /* Adjust button height */
+    border-radius: 50%; /* Make the button circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 400px;
+  }
+
+  .close-div {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    z-index: 9999;
+  }
+  
+  .close-button {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background-color: red;
+    color: #ffffff;
+    cursor: pointer;
+  }

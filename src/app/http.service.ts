@@ -36,4 +36,8 @@ export class HttpService {
   getElementNodes(name: string): Observable<any> {
     return this.http.get<any>(`${this.APIURL}/api/nodes/element/name/${name}`);
   }
+
+  getNodeById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.APIURL}/api/nodes/${id}`);
+  }
 }

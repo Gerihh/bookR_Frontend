@@ -2,20 +2,23 @@ import { Component, Input, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { ActivatedRoute } from '@angular/router';
 import { NodeModel } from '../node-model';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-node',
   templateUrl: './node.component.html',
-  styleUrl: './node.component.css',
+  styleUrls: ['./node.component.css'],
 })
 export class NodeComponent implements OnInit {
   @Input() nodes: NodeModel[] = [];
   name: string = '';
+  showDescription: boolean = false;
+  selectedNode: NodeModel | null = null;
 
   constructor(
     private httpService: HttpService,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
@@ -24,37 +27,70 @@ export class NodeComponent implements OnInit {
 
     this.httpService.getElementNodes(this.name).subscribe({
       next: (result: NodeModel[]) => {
-        this.nodes = this.organizeNodes(result); // Use organizeNodes to structure nodes
+        this.nodes = result;
+        this.randomizeNodePositions();
       },
       error: (err: any) => console.log(err),
     });
   }
 
-  organizeNodes(nodes: NodeModel[]): NodeModel[] {
-    const nodeMap = new Map<number, NodeModel>();
-    const rootNodes: NodeModel[] = [];
+  randomizeNodePositions(): void {
+    const maxX = window.innerWidth - 200; // Adjust width based on node size
+    const maxY = window.innerHeight - 200; // Adjust height based on node size
 
-    // Build a map of nodes using their IDs
-    nodes.forEach((node) => {
-      node.children = []; // Initialize children as an empty array
-      nodeMap.set(node.id, node);
+    this.nodes.forEach((node) => {
+      const { x, y } = this.getRandomPosition(maxX, maxY);
+      node.positionX = x;
+      node.positionY = y;
     });
-
-    // Link child nodes to parent nodes
-    nodes.forEach((node) => {
-      if (node.parentNodeId !== null) {
-        const parentNode = nodeMap.get(node.parentNodeId);
-        if (parentNode) {
-          // Ensure parentNode.children is initialized before pushing
-          parentNode.children = parentNode.children || [];
-          parentNode.children.push(node);
-        }
-      } else {
-        rootNodes.push(node); // If no parent, it's a root node
-      }
-    });
-
-    return rootNodes;
   }
 
+  getRandomPosition(maxX: number, maxY: number): { x: number, y: number } {
+    const x = Math.floor(Math.random() * maxX);
+    const y = Math.floor(Math.random() * maxY);
+    return { x, y };
+  }
+
+  startDrag(event: MouseEvent | TouchEvent, node: NodeModel): void {
+    event.preventDefault();
+    const initialX = typeof (event as TouchEvent).touches !== 'undefined' ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
+    const initialY = typeof (event as TouchEvent).touches !== 'undefined' ? (event as TouchEvent).touches[0].clientY : (event as MouseEvent).clientY;
+    const offsetX = node.positionX !== undefined ? initialX - node.positionX : 0;
+    const offsetY = node.positionY !== undefined ? initialY - node.positionY : 0;
+
+    const moveHandler = (moveEvent: MouseEvent | TouchEvent) => {
+      moveEvent.preventDefault();
+      const currentX = typeof (moveEvent as TouchEvent).touches !== 'undefined' ? (moveEvent as TouchEvent).touches[0].clientX : (moveEvent as MouseEvent).clientX;
+      const currentY = typeof (moveEvent as TouchEvent).touches !== 'undefined' ? (moveEvent as TouchEvent).touches[0].clientY : (moveEvent as MouseEvent).clientY;
+      if (node.positionX !== undefined && node.positionY !== undefined) {
+        node.positionX = currentX - offsetX;
+        node.positionY = currentY - offsetY;
+      }
+    };
+
+    const upHandler = () => {
+      document.removeEventListener('mousemove', moveHandler);
+      document.removeEventListener('touchmove', moveHandler);
+      document.removeEventListener('mouseup', upHandler);
+      document.removeEventListener('touchend', upHandler);
+    };
+
+    document.addEventListener('mousemove', moveHandler);
+    document.addEventListener('touchmove', moveHandler);
+    document.addEventListener('mouseup', upHandler);
+    document.addEventListener('touchend', upHandler);
+  }
+
+  openDescription(nodeId: number) {
+    this.httpService.getNodeById(nodeId).subscribe({
+      next: (result: any) => (this.selectedNode = result),
+      error: (err: any) =>console.log(err)
+    });
+    this.showDescription = true;
+  }
+
+  closeDescription() {
+    this.showDescription = false;
+    this.selectedNode = null;
+  }
 }

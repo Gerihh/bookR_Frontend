@@ -1,23 +1,29 @@
-<!-- node.component.html -->
-<ng-container *ngIf="nodes && nodes.length > 0"> <!-- Ensure nodes exist and are not empty -->
-  <ul>
-    <li *ngFor="let node of nodes">
-      {{ node.name }}
-      <!-- Recursively render child nodes -->
-      <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node.children }"></ng-container>
-    </li>
-  </ul>
-</ng-container>
+<div class="node-container">
+  <div *ngFor="let node of nodes" class="node" [style.left.px]="node.positionX" [style.top.px]="node.positionY"
+    (mousedown)="startDrag($event, node)" (touchstart)="startDrag($event, node)">
+    <div class="content-container">
+      <div>{{ node.name }}</div>
 
-<ng-template #nodeTemplate let-nodes>
-  <!-- Check if there are any child nodes to render -->
-  <ng-container *ngIf="nodes && nodes.length > 0">
-    <ul>
-      <li *ngFor="let childNode of nodes">
-        {{ childNode.name }}
-        <!-- Recursively render grandchildren -->
-        <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: childNode.children }"></ng-container>
-      </li>
-    </ul>
-  </ng-container>
-</ng-template>
+      <div class="button-container">
+        <button (click)="openDescription(node.id)" class="button">
+          <i class="pi pi-circle"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (showDescription && selectedNode) {
+<div class="card">
+  <p-card [header]="selectedNode.name">
+    <p class="m-0">
+      {{selectedNode.description}}
+    </p>
+  </p-card>
+  <div class="close-div">
+    <button class="close-button" (click)="closeDescription()">
+      <i class="pi pi-times"></i>
+    </button>
+  </div>
+</div>
+}
