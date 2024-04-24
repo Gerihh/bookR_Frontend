@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { HttpService } from '../http.service';
 import { ActivatedRoute } from '@angular/router';
 import { NodeModel } from '../node-model';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { catchError, forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-node',
@@ -14,6 +14,15 @@ export class NodeComponent implements OnInit {
   name: string = '';
   showDescription: boolean = false;
   selectedNode: NodeModel | null = null;
+  children: NodeModel[] = [];
+  showForm: boolean = false;
+  model: NodeModel = {
+    id: 0,
+    name: '',
+    description: '',
+    elementId: 0,
+    parentNodeId: null
+  }
 
   constructor(
     private httpService: HttpService,
@@ -82,15 +91,58 @@ export class NodeComponent implements OnInit {
   }
 
   openDescription(nodeId: number) {
-    this.httpService.getNodeById(nodeId).subscribe({
-      next: (result: any) => (this.selectedNode = result),
-      error: (err: any) =>console.log(err)
+    this.children = [];
+
+    // Combine requests using forkJoin
+    forkJoin([
+      this.httpService.getNodeById(nodeId),
+      this.httpService.getChildrenNodes(nodeId).pipe(
+        catchError(error => {
+          // If an error occurs (e.g., no children found), emit an empty array
+          return of([]);
+        })
+      )
+    ]).subscribe({
+      next: ([nodeResult, childrenResult]: [NodeModel, NodeModel[]]) => {
+        this.selectedNode = nodeResult;
+        this.model = nodeResult;
+        this.children = childrenResult;
+
+        // Ensure this.selectedNode is not null or undefined before assigning children
+        if (this.selectedNode) {
+          this.selectedNode.children = this.children;
+        }
+
+        this.showDescription = true;
+        console.log(this.selectedNode);
+        console.log(this.children.length);
+      },
+      error: (err: any) => console.log(err)
     });
-    this.showDescription = true;
   }
 
   closeDescription() {
     this.showDescription = false;
     this.selectedNode = null;
+    this.children = [];
+  }
+
+  openEditor() {
+    this.showDescription = false;
+    this.showForm = true;
+  }
+
+  submitNodeEdit(id: number) {
+    this.httpService.updateNode(id, this.model).subscribe({
+      next: (result: any) => {
+        window.location.reload();
+        alert("Sikeres szerkesztés");
+      },
+      error: (err: any) => console.log(err)
+    });
+  }
+
+  switchState() {
+    this.showForm = !this.showForm;
   }
 }

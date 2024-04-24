@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BookModel } from './book-model';
 import { ElementModel } from './element-model';
+import { NodeModel } from './node-model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,13 @@ export class HttpService {
 
   getNodeById(id: number): Observable<any> {
     return this.http.get<any>(`${this.APIURL}/api/nodes/${id}`);
+  }
+
+  getChildrenNodes(parentId: number): Observable<any> {
+    return this.http.get<any>(`${this.APIURL}/api/child-nodes/${parentId}`);
+  }
+
+  updateNode(id: number, model: NodeModel): Observable<any> {
+    return this.http.put(`${this.APIURL}/api/nodes/${id}`, model);
   }
 }

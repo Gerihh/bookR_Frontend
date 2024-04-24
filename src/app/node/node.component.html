@@ -3,8 +3,7 @@
     (mousedown)="startDrag($event, node)" (touchstart)="startDrag($event, node)">
     <div class="content-container">
       <div>{{ node.name }}</div>
-
-      <div class="button-container">
+      <div>
         <button (click)="openDescription(node.id)" class="button">
           <i class="pi pi-circle"></i>
         </button>
@@ -14,16 +13,53 @@
 </div>
 
 @if (showDescription && selectedNode) {
-<div class="card">
-  <p-card [header]="selectedNode.name">
-    <p class="m-0">
-      {{selectedNode.description}}
-    </p>
-  </p-card>
-  <div class="close-div">
-    <button class="close-button" (click)="closeDescription()">
-      <i class="pi pi-times"></i>
-    </button>
+  <div class="card">
+    <p-card [header]="selectedNode.name">
+      <p class="m-0">
+        {{selectedNode.description}}
+      </p>
+      <p-footer>
+        <div class="action-footer">
+          <p-button label="Szerkesztés" [raised]="true" severity="warning" [style]="{height: '10px'}" (onClick)="openEditor()"></p-button>
+          <span>{{selectedNode.children?.length}} gondolat</span>
+          <p-button label="Törlés" [raised]="true" severity="danger" [style]="{height: '10px'}"></p-button>
+        </div>
+      </p-footer>
+    </p-card>
+    <div class="close-div">
+      <button class="close-button" (click)="closeDescription()">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+    @if (children.length > 0) {
+      <div class="children-container">
+        @for (item of children; track $index) {
+          <p-card class="children-card" [style]="{height: 'auto'}" (click)="openDescription(item.id)">
+            <div class="children-content">
+              {{item.name}}
+            </div>
+          </p-card>
+        }
+      </div>
+    }
   </div>
-</div>
+}
+
+@if (showForm && selectedNode) {
+  <div class="input">
+    <p-card [header]="selectedNode.name">
+        <p>Név</p>
+        <input type="text" [(ngModel)]="model.name"/>
+        <p>Leírás</p>
+        <input type="text" [(ngModel)]="model.description"/>
+        <div class="submit-button">
+          <p-button label="Szerkesztés" (click)="submitNodeEdit(selectedNode.id)"></p-button>
+        </div>
+        <div class="close-div">
+          <button class="close-button" (click)="switchState()">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
+      </p-card>
+  </div>
 }
