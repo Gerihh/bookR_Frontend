@@ -21,6 +21,9 @@ export class ElementComponent implements OnInit {
     bookId: 0,
   };
   bookId: number = 0;
+  currentElement: any;
+  showEditor: boolean = false;
+  showConfirmation: boolean = false;
 
   constructor(
     private httpService: HttpService,
@@ -38,7 +41,7 @@ export class ElementComponent implements OnInit {
       error: (err: any) => console.log(err),
     });
 
-    this.httpService.getBookIdByTitle(this.title).subscribe({
+    this.httpService.getBookByTitle(this.title).subscribe({
       next: (result: any) => {
         this.bookId = result.id;
       },
@@ -69,6 +72,9 @@ export class ElementComponent implements OnInit {
 
   switchState() {
     this.showForm = !this.showForm;
+    if (!this.showForm) {
+      this.model.name = '';
+    }
   }
 
   submitNewElement() {
@@ -88,5 +94,54 @@ export class ElementComponent implements OnInit {
 
   clickedElement(name: string) {
     this.router.navigate(['/', this.title, name, 'nodes']);
+  }
+
+  openEditor(name: string) {
+    this.showEditor = true;
+    this.httpService.getElementByName(name).subscribe({
+      next: (result: any) => {
+        this.currentElement = result
+        this.model = this.currentElement},
+
+      error: (err: any) =>console.log(err)
+    });
+  }
+
+  closeEditor() {
+    this.showEditor = false;
+    this.model.name = '';
+  }
+
+  submitElementEdit(id: number) {
+    this.httpService.updateElement(id, this.model).subscribe({
+      next: (result: any) => {
+        window.location.reload();
+        alert('Sikeres szerkesztés');
+      },
+      error: (err: any) => console.log(err),
+    });
+  }
+
+  deleteElement(id: number) {
+    this.httpService.deleteElement(id).subscribe({
+      next: (result: any) => {
+        alert(`${this.currentElement.name} törölve`);
+        window.location.reload();
+      },
+      error: (err: any) => console.log(err),
+    });
+  }
+
+  openConfirmation(name: string) {
+    this.showConfirmation = true;
+    this.httpService.getElementByName(name).subscribe({
+      next: (result: any) => (this.currentElement = result),
+      error: (err: any) => console.log(err)
+    });
+  }
+
+  cancelDeletion() {
+    this.showConfirmation = false;
+    this.currentElement = null;
   }
 }

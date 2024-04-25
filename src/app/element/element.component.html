@@ -1,35 +1,97 @@
-<div class="card-container" (mousedown)="startDrag($event)" (mousemove)="drag($event)" (mouseup)="endDrag()">
+<div
+  class="card-container"
+  (mousedown)="startDrag($event)"
+  (mousemove)="drag($event)"
+  (mouseup)="endDrag()"
+>
   <div class="scroll-box">
     @for (item of elements; track $index) {
-      <p-card [header]="item.name" [style]="{ width: '340px' }" class="card">
-        <ng-template pTemplate="header">
-          <div class="header-content">
-            <img alt="Card" src="assets/note.png" (click)="clickedElement(item.name)"/>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="footer">
-          <p style="text-align: end; font-weight: bold;">{{item.nodeCount}} gondolat</p>
+    <p-card [header]="item.name" [style]="{ width: '400px' }" class="card">
+      <ng-template pTemplate="header">
+        <div class="header-content">
+          <img
+            alt="Card"
+            src="assets/note.png"
+            (click)="clickedElement(item.name)"
+          />
+        </div>
       </ng-template>
-      </p-card>
-      }
+
+      <p-footer>
+        <div class="action-footer">
+          <p-button
+            label="Szerkesztés"
+            [raised]="true"
+            severity="warning"
+            [style]="{ height: '10px', width: '150px' }"
+            (click)="openEditor(item.name)"
+          ></p-button>
+          <p style="font-weight: bold">{{ item.nodeCount }} gondolat</p>
+          <p-button
+            label="Törlés"
+            [raised]="true"
+            severity="danger"
+            [style]="{ height: '10px', width: '150px' }"
+            (click)="openConfirmation(item.name)"
+          ></p-button>
+        </div>
+      </p-footer>
+    </p-card>
+    }
   </div>
 </div>
 
 @if (showForm) {
-  <div class="input">
-    <p-card header="Új kategória felvétele">
-        <p>Kategória neve</p>
-        <input type="text" [(ngModel)]="model.name"/>
-        <div class="submit-button">
-          <p-button label="Felvétel" (click)="submitNewElement()"></p-button>
-        </div>
-        <div class="close-div">
-          <button class="close-button" (click)="switchState()">
-            <i class="pi pi-times"></i>
-          </button>
-        </div>
-      </p-card>
-  </div>
+<div class="input">
+  <p-card header="Új kategória felvétele">
+    <p>Kategória neve</p>
+    <input type="text" [(ngModel)]="model.name" />
+    <div class="submit-button">
+      <p-button label="Felvétel" (click)="submitNewElement()"></p-button>
+    </div>
+    <div class="close-div">
+      <button class="close-button" (click)="switchState()">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+  </p-card>
+</div>
+} @if (showEditor && currentElement) {
+<div class="input">
+  <p-card [header]="currentElement.name">
+    <p>Név</p>
+    <input type="text" [(ngModel)]="model.name" />
+    <div class="submit-button">
+      <p-button
+        label="Szerkesztés"
+        (click)="submitElementEdit(currentElement.id)"
+      ></p-button>
+    </div>
+    <div class="close-div">
+      <button class="close-button" (click)="closeEditor()">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+  </p-card>
+</div>
+} @if (showConfirmation && currentElement) {
+<div class="confirmation-card">
+  <p-card header="Biztosan törölni akarja?" [subheader]="currentElement.name">
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Törlés"
+        styleClass="p-button-danger"
+        (click)="deleteElement(currentElement.id)"
+      ></p-button>
+      <p-button
+        label="Mégse"
+        styleClass="p-button-secondary"
+        (click)="cancelDeletion()"
+        [style]="{ 'margin-left': '.5em' }"
+      ></p-button>
+    </ng-template>
+  </p-card>
+</div>
 }
 
 <div class="plus-button">

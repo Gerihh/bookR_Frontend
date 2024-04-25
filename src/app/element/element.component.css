@@ -20,6 +20,15 @@
   color: blue;
 }
 
+.confirmation-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 400px;
+}
+
 .scroll-box {
   display: inline-flex;
   vertical-align: middle;
@@ -72,4 +81,12 @@
   background-color: red;
   color: #ffffff;
   cursor: pointer;
+}
+
+.action-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
 }
