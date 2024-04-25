@@ -122,6 +122,23 @@
   cursor: pointer;
 }
 
+.child-creation-div {
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  z-index: 9999;
+}
+
+.child-creation-button {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: green;
+  color: #ffffff;
+  cursor: pointer;
+}
+
 .plus-button {
   position: fixed;
   top: 20px;

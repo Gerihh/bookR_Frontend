@@ -30,7 +30,7 @@ export class HttpService {
     return this.http.post(`${this.APIURL}/api/elements`, model);
   }
 
-  getBookIdByTitle(title: string): Observable<any> {
+  getBookByTitle(title: string): Observable<any> {
     return this.http.get<any>(`${this.APIURL}/api/book/name/${title}`);
   }
 
@@ -60,5 +60,21 @@ export class HttpService {
 
   getElementByName(name: string): Observable<any> {
     return this.http.get(`${this.APIURL}/api/element/name/${name}`);
+  }
+
+  updateElement(id: number, model: ElementModel): Observable<any> {
+    return this.http.put(`${this.APIURL}/api/elements/${id}`, model);
+  }
+
+  deleteElement(id: number): Observable<any> {
+    return this.http.delete(`${this.APIURL}/api/elements/${id}`);
+  }
+
+  updateBook(id: number, model: BookModel): Observable<any> {
+    return this.http.put(`${this.APIURL}/api/books/${id}`, model);
+  }
+
+  deleteBook(id: number): Observable<any> {
+    return this.http.delete(`${this.APIURL}/api/books/${id}`);
   }
 }

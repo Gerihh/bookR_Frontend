@@ -130,8 +130,6 @@ export class NodeComponent implements OnInit {
         }
 
         this.showDescription = true;
-        console.log(this.selectedNode);
-        console.log(this.children.length);
       },
       error: (err: any) => console.log(err),
     });
@@ -164,6 +162,10 @@ export class NodeComponent implements OnInit {
 
   switchFormState() {
     this.showForm = !this.showForm;
+    if (this.showForm) {
+      this.model.name = '';
+        this.model.description = '';
+    }
   }
 
   openConfirmation() {
@@ -173,6 +175,7 @@ export class NodeComponent implements OnInit {
 
   cancelDeletion() {
     this.showConfirmation = false;
+    this.selectedNode = null;
   }
 
   deleteNode(id: number) {
@@ -190,6 +193,7 @@ export class NodeComponent implements OnInit {
       next: (result: any) => {
         this.currentElement = result;
         this.model.elementId = this.currentElement.id;
+
 
         this.httpService.createNewNode(this.model).subscribe({
           next: (result: any) => {
@@ -210,5 +214,13 @@ export class NodeComponent implements OnInit {
       alert('Please enter a node description');
       return;
     }
+  }
+
+  setParentNodeId() {
+    this.showForm = true;
+    this.showDescription = false;
+    this.model.name = '';
+    this.model.description = '';
+    this.model.parentNodeId = this.selectedNode.id;
   }
 }

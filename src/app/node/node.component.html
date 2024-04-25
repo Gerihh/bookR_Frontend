@@ -26,6 +26,11 @@
         </div>
       </p-footer>
     </p-card>
+    <div class="child-creation-div">
+      <button class="child-creation-button" (click)="setParentNodeId()">
+        <i class="pi pi-plus"></i>
+      </button>
+    </div>
     <div class="close-div">
       <button class="close-button" (click)="closeDescription()">
         <i class="pi pi-times"></i>
@@ -64,7 +69,7 @@
   </div>
 }
 
-@if (showConfirmation && selectedNode) {
+@if (showConfirmation) {
   <div class="card">
     <p-card header="Biztosan törölni akarja?" [subheader]="selectedNode.name">
       <ng-template pTemplate="footer">
