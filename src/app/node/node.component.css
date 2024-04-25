@@ -121,3 +121,20 @@
   color: #ffffff;
   cursor: pointer;
 }
+
+.plus-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.rounded-button {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  border: none;
+  background-color: #007bff;
+  color: #ffffff;
+  cursor: pointer;
+}

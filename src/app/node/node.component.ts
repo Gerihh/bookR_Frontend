@@ -10,24 +10,26 @@ import { catchError, forkJoin, of } from 'rxjs';
   styleUrls: ['./node.component.css'],
 })
 export class NodeComponent implements OnInit {
-  @Input() nodes: NodeModel[] = [];
+  @Input() nodes: any[] = [];
   name: string = '';
   showDescription: boolean = false;
-  selectedNode: NodeModel | null = null;
-  children: NodeModel[] = [];
-  showForm: boolean = false;
+  selectedNode: any;
+  children: any[] = [];
+  showEditor: boolean = false;
   model: NodeModel = {
-    id: 0,
     name: '',
     description: '',
     elementId: 0,
-    parentNodeId: null
-  }
+    parentNodeId: null,
+  };
+  showConfirmation: boolean = false;
+  showForm: boolean = false;
+  currentElement: any;
 
   constructor(
     private httpService: HttpService,
     private activatedRoute: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
@@ -54,7 +56,7 @@ export class NodeComponent implements OnInit {
     });
   }
 
-  getRandomPosition(maxX: number, maxY: number): { x: number, y: number } {
+  getRandomPosition(maxX: number, maxY: number): { x: number; y: number } {
     const x = Math.floor(Math.random() * maxX);
     const y = Math.floor(Math.random() * maxY);
     return { x, y };
@@ -62,15 +64,29 @@ export class NodeComponent implements OnInit {
 
   startDrag(event: MouseEvent | TouchEvent, node: NodeModel): void {
     event.preventDefault();
-    const initialX = typeof (event as TouchEvent).touches !== 'undefined' ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
-    const initialY = typeof (event as TouchEvent).touches !== 'undefined' ? (event as TouchEvent).touches[0].clientY : (event as MouseEvent).clientY;
-    const offsetX = node.positionX !== undefined ? initialX - node.positionX : 0;
-    const offsetY = node.positionY !== undefined ? initialY - node.positionY : 0;
+    const initialX =
+      typeof (event as TouchEvent).touches !== 'undefined'
+        ? (event as TouchEvent).touches[0].clientX
+        : (event as MouseEvent).clientX;
+    const initialY =
+      typeof (event as TouchEvent).touches !== 'undefined'
+        ? (event as TouchEvent).touches[0].clientY
+        : (event as MouseEvent).clientY;
+    const offsetX =
+      node.positionX !== undefined ? initialX - node.positionX : 0;
+    const offsetY =
+      node.positionY !== undefined ? initialY - node.positionY : 0;
 
     const moveHandler = (moveEvent: MouseEvent | TouchEvent) => {
       moveEvent.preventDefault();
-      const currentX = typeof (moveEvent as TouchEvent).touches !== 'undefined' ? (moveEvent as TouchEvent).touches[0].clientX : (moveEvent as MouseEvent).clientX;
-      const currentY = typeof (moveEvent as TouchEvent).touches !== 'undefined' ? (moveEvent as TouchEvent).touches[0].clientY : (moveEvent as MouseEvent).clientY;
+      const currentX =
+        typeof (moveEvent as TouchEvent).touches !== 'undefined'
+          ? (moveEvent as TouchEvent).touches[0].clientX
+          : (moveEvent as MouseEvent).clientX;
+      const currentY =
+        typeof (moveEvent as TouchEvent).touches !== 'undefined'
+          ? (moveEvent as TouchEvent).touches[0].clientY
+          : (moveEvent as MouseEvent).clientY;
       if (node.positionX !== undefined && node.positionY !== undefined) {
         node.positionX = currentX - offsetX;
         node.positionY = currentY - offsetY;
@@ -97,11 +113,11 @@ export class NodeComponent implements OnInit {
     forkJoin([
       this.httpService.getNodeById(nodeId),
       this.httpService.getChildrenNodes(nodeId).pipe(
-        catchError(error => {
+        catchError((error) => {
           // If an error occurs (e.g., no children found), emit an empty array
           return of([]);
         })
-      )
+      ),
     ]).subscribe({
       next: ([nodeResult, childrenResult]: [NodeModel, NodeModel[]]) => {
         this.selectedNode = nodeResult;
@@ -117,7 +133,7 @@ export class NodeComponent implements OnInit {
         console.log(this.selectedNode);
         console.log(this.children.length);
       },
-      error: (err: any) => console.log(err)
+      error: (err: any) => console.log(err),
     });
   }
 
@@ -129,20 +145,70 @@ export class NodeComponent implements OnInit {
 
   openEditor() {
     this.showDescription = false;
-    this.showForm = true;
+    this.showEditor = true;
   }
 
   submitNodeEdit(id: number) {
     this.httpService.updateNode(id, this.model).subscribe({
       next: (result: any) => {
         window.location.reload();
-        alert("Sikeres szerkesztés");
+        alert('Sikeres szerkesztés');
       },
-      error: (err: any) => console.log(err)
+      error: (err: any) => console.log(err),
     });
   }
 
-  switchState() {
+  switchEditorState() {
+    this.showEditor = !this.showEditor;
+  }
+
+  switchFormState() {
     this.showForm = !this.showForm;
+  }
+
+  openConfirmation() {
+    this.showDescription = false;
+    this.showConfirmation = true;
+  }
+
+  cancelDeletion() {
+    this.showConfirmation = false;
+  }
+
+  deleteNode(id: number) {
+    this.httpService.deleteNode(id).subscribe({
+      next: (result: any) => {
+        alert(`${this.selectedNode.name} törölve`);
+        window.location.reload();
+      },
+      error: (err: any) => console.log(err),
+    });
+  }
+
+  submitNewNode() {
+    this.httpService.getElementByName(this.name).subscribe({
+      next: (result: any) => {
+        this.currentElement = result;
+        this.model.elementId = this.currentElement.id;
+
+        this.httpService.createNewNode(this.model).subscribe({
+          next: (result: any) => {
+            window.location.reload();
+            alert(`${this.model.name} created`);
+          },
+          error: (err: any) => console.log(err),
+        });
+      },
+      error: (err: any) => console.log(err),
+    });
+
+    if (!this.model.name) {
+      alert('Please enter a node name');
+      return;
+    }
+    if (!this.model.description) {
+      alert('Please enter a node description');
+      return;
+    }
   }
 }

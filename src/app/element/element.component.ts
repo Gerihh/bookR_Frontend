@@ -9,7 +9,6 @@ import { ElementModel } from '../element-model';
   styleUrl: './element.component.css',
 })
 export class ElementComponent implements OnInit {
-
   elements: any[] = [];
   title: string = '';
   isDragging: boolean = false;

@@ -20,9 +20,9 @@
       </p>
       <p-footer>
         <div class="action-footer">
-          <p-button label="Szerkesztés" [raised]="true" severity="warning" [style]="{height: '10px'}" (onClick)="openEditor()"></p-button>
+          <p-button label="Szerkesztés" [raised]="true" severity="warning" [style]="{height: '10px', width: '150px'}" (click)="openEditor()"></p-button>
           <span>{{selectedNode.children?.length}} gondolat</span>
-          <p-button label="Törlés" [raised]="true" severity="danger" [style]="{height: '10px'}"></p-button>
+          <p-button label="Törlés" [raised]="true" severity="danger" [style]="{height: '10px', width: '150px'}" (click)="openConfirmation()"></p-button>
         </div>
       </p-footer>
     </p-card>
@@ -45,7 +45,7 @@
   </div>
 }
 
-@if (showForm && selectedNode) {
+@if (showEditor && selectedNode) {
   <div class="input">
     <p-card [header]="selectedNode.name">
         <p>Név</p>
@@ -56,10 +56,46 @@
           <p-button label="Szerkesztés" (click)="submitNodeEdit(selectedNode.id)"></p-button>
         </div>
         <div class="close-div">
-          <button class="close-button" (click)="switchState()">
+          <button class="close-button" (click)="switchEditorState()">
             <i class="pi pi-times"></i>
           </button>
         </div>
       </p-card>
   </div>
 }
+
+@if (showConfirmation && selectedNode) {
+  <div class="card">
+    <p-card header="Biztosan törölni akarja?" [subheader]="selectedNode.name">
+      <ng-template pTemplate="footer">
+          <p-button label="Törlés" styleClass="p-button-danger" (click)="deleteNode(selectedNode.id)"></p-button>
+          <p-button label="Mégse" styleClass="p-button-secondary" (click)="cancelDeletion()" [style]="{ 'margin-left': '.5em' }"></p-button>
+      </ng-template>
+    </p-card>
+  </div>
+}
+
+@if (showForm) {
+  <div class="input">
+    <p-card header="Új gondolat felvétele">
+        <p>Gondolat neve</p>
+        <input type="text" [(ngModel)]="model.name"/>
+        <p>Leírás</p>
+        <input type="text" [(ngModel)]="model.description"/>
+        <div class="submit-button">
+          <p-button label="Felvétel" (click)="submitNewNode()"></p-button>
+        </div>
+        <div class="close-div">
+          <button class="close-button" (click)="switchFormState()">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
+      </p-card>
+  </div>
+}
+
+<div class="plus-button">
+  <button class="rounded-button" (click)="switchFormState()">
+    <i class="pi pi-plus"></i>
+  </button>
+</div>

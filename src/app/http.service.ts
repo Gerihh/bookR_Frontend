@@ -49,4 +49,16 @@ export class HttpService {
   updateNode(id: number, model: NodeModel): Observable<any> {
     return this.http.put(`${this.APIURL}/api/nodes/${id}`, model);
   }
+
+  deleteNode(id: number): Observable<any> {
+    return this.http.delete(`${this.APIURL}/api/nodes/${id}`);
+  }
+
+  createNewNode(model: NodeModel): Observable<any> {
+    return this.http.post(`${this.APIURL}/api/nodes`, model);
+  }
+
+  getElementByName(name: string): Observable<any> {
+    return this.http.get(`${this.APIURL}/api/element/name/${name}`);
+  }
 }
