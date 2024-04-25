@@ -17,6 +17,10 @@ export class BookComponent implements OnInit {
     title: '',
   };
   showForm: boolean = false;
+  showEditor: boolean = false;
+  title: string = '';
+  currentBook: any;
+  showConfirmation: boolean = false;
 
   constructor(private httpService: HttpService, private router: Router) {}
 
@@ -65,9 +69,59 @@ export class BookComponent implements OnInit {
 
   switchState() {
     this.showForm = !this.showForm;
+    if (this.showForm) {
+      this.model.title = '';
+    }
   }
 
   clickedBook(title: string) {
     this.router.navigate(['/', title, 'elements']);;
+  }
+
+  openEditor(title: string) {
+    this.showEditor = true;
+    this.httpService.getBookByTitle(title).subscribe({
+      next: (result: any) => {
+        this.currentBook = result
+        this.model.title = this.currentBook.title},
+      error: (err: any) => console.log(err)
+    });
+  }
+
+  closeEditor() {
+    this.showEditor = false;
+    console.log(this.title);
+  }
+
+  submitBookEdit(id: number) {
+    this.httpService.updateBook(id, this.model).subscribe({
+      next: (result: any) => {
+        window.location.reload();
+        alert('Sikeres szerkesztés');
+      },
+      error: (err: any) => console.log(err),
+    });
+  }
+
+  openConfirmation(name: string) {
+    this.showConfirmation = true;
+    this.httpService.getBookByTitle(name).subscribe({
+      next: (result: any) => (this.currentBook = result),
+      error: (err: any) => console.log(err)
+    });
+  }
+  cancelDeletion() {
+    this.showConfirmation = false;
+    this.currentBook = null;
+  }
+
+  deleteBook(id: number) {
+    this.httpService.deleteBook(id).subscribe({
+      next: (result: any) => {
+        alert(`${this.currentBook.title} törölve`);
+        window.location.reload();
+      },
+      error: (err: any) => console.log(err),
+    });
   }
 }

@@ -1,43 +1,95 @@
-      <div class="card-container" (mousedown)="startDrag($event)" (mousemove)="drag($event)" (mouseup)="endDrag()">
-        <div class="scroll-box">
-          @for (item of books; track $index) {
-            <p-card [header]="item.title" [style]="{ width: '340px' }" class="card">
-              <ng-template pTemplate="header">
-                <div class="header-content">
-                  <img alt="Card" src="assets/book.png" (click)="clickedBook(item.title)"/>
-                </div>
-              </ng-template>
-              <ng-template pTemplate="footer">
-                <p style="text-align: end; font-weight: bold;">{{item.elementCount}} kategória</p>
-            </ng-template>
-            </p-card>
-            }
+<div
+  class="card-container"
+  (mousedown)="startDrag($event)"
+  (mousemove)="drag($event)"
+  (mouseup)="endDrag()"
+>
+  <div class="scroll-box">
+    @for (item of books; track $index) {
+    <p-card [header]="item.title" [style]="{ width: '400px' }" class="card">
+      <ng-template pTemplate="header">
+        <div class="header-content">
+          <img
+            alt="Card"
+            src="assets/book.png"
+            (click)="clickedBook(item.title)"
+          />
         </div>
+      </ng-template>
+
+      <div class="action-footer">
+        <p-button
+          label="Szerkesztés"
+          [raised]="true"
+          severity="warning"
+          [style]="{ height: '10px', width: '150px' }"
+          (click)="openEditor(item.title)"
+        ></p-button>
+        <p style="font-weight: bold">{{ item.elementCount }} kategória</p>
+        <p-button
+          label="Törlés"
+          [raised]="true"
+          severity="danger"
+          [style]="{ height: '10px', width: '150px' }"
+          (click)="openConfirmation(item.title)"
+        ></p-button>
       </div>
+    </p-card>
+    }
+  </div>
+</div>
 
-      @if (showForm) {
-        <div class="input">
-          <p-card header="Új könyv felvétele">
-              <p>Cím</p>
-              <input type="text" [(ngModel)]="model.title"/>
-              <div class="submit-button">
-                <p-button label="Felvétel" (click)="submitNewBook()"></p-button>
-              </div>
-              <div class="close-div">
-                <button class="close-button" (click)="switchState()">
-                  <i class="pi pi-times"></i>
-                </button>
-              </div>
-            </p-card>
-        </div>
-      }
+@if (showForm) {
+<div class="input">
+  <p-card header="Új könyv felvétele">
+    <p>Cím</p>
+    <input type="text" [(ngModel)]="model.title" />
+    <div class="submit-button">
+      <p-button label="Felvétel" (click)="submitNewBook()"></p-button>
+    </div>
+    <div class="close-div">
+      <button class="close-button" (click)="switchState()">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+  </p-card>
+</div>
+} @if (showEditor && currentBook) {
+<div class="input">
+  <p-card [header]="currentBook.title">
+    <p>Név</p>
+    <input type="text" [(ngModel)]="model.title" />
+    <div class="submit-button">
+      <p-button
+        label="Szerkesztés"
+        (click)="submitBookEdit(currentBook.id)"
+      ></p-button>
+    </div>
+    <div class="close-div">
+      <button class="close-button" (click)="closeEditor()">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+  </p-card>
+</div>
+} @if (showConfirmation && currentBook) {
+<div class="confirmation-card">
+  <p-card header="Biztosan törölni akarja?" [subheader]="currentBook.title">
+    <ng-template pTemplate="footer">
+      <p-button label="Törlés" styleClass="p-button-danger" (click)="deleteBook(currentBook.id)"></p-button>
+      <p-button
+        label="Mégse"
+        styleClass="p-button-secondary"
+        [style]="{ 'margin-left': '.5em' }"
+        (click)="cancelDeletion()"
+      ></p-button>
+    </ng-template>
+  </p-card>
+</div>
+}
 
-
-      <div class="plus-button">
-        <button class="rounded-button" (click)="switchState()">
-          <i class="pi pi-plus"></i>
-        </button>
-      </div>
-
-
-
+<div class="plus-button">
+  <button class="rounded-button" (click)="switchState()">
+    <i class="pi pi-plus"></i>
+  </button>
+</div>
